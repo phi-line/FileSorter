@@ -1,6 +1,6 @@
 import os
 import sys #args
-import glob
+#import glob
 import shutil #hight level file operations
 
 class extensions:
