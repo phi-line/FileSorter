@@ -3,7 +3,7 @@ import sys #args
 #import glob
 import shutil #hight level file operations
 
-from exceptions import UsageError, NoSortableFiles
+from exceptions import UsageError, NoSortableFiles, Erect
 from extensions import Extensions as ext
 
 def main():
@@ -21,19 +21,21 @@ def main():
         if add_ext:
             e.append_ext(add_ext)
         else:
-            raise_type_error(type)
+            raise_usage_error(type)
 
     # this is only for -s, -so, and -d
     if len(sys.argv) <= 2 or not os.path.isdir(sys.argv[2]):
-        raise_type_error(type)
+        raise_usage_error(type)
 
-    #python3 sort.py -so [path] [.ext1]
-    if type == '-so':
-        e = ext(path = sys.argv[2], single=sys.argv[3])
+    #python3 sort.py -so [path] [.ext1] [.ext2] [.ext3] ...
+    if len(sys.argv) > 3:
+        ext_list = [sys.argv[x] for x in range(3, len(sys.argv)) if
+                   ext.is_valid(sys.argv[x])]
+        e = ext(path = sys.argv[2], list=ext_list)
     else: e = ext(path = sys.argv[2])
 
     # {'ext': ['/path1', '/path2']}
-    ext_dict = ext_dict_builder(e.ext_list)
+    ext_dict = ext_dict_builder(e)
 
     if type == '-d':
         if ext_dict:
@@ -67,10 +69,10 @@ def main():
 
             raise SystemExit
 
-def ext_dict_builder(ext_list):
+def ext_dict_builder(e):
     ext_dict = dict()
 
-    for line in ext_list:
+    for line in e.ext_list:
         #for file in glob.glob(''.join(path, '*', line)):
         #files = [n for n in glob('*'.join((path, line))) if os.path.isfile(n)]
 
@@ -82,59 +84,6 @@ def ext_dict_builder(ext_list):
                 ext_dict[line] = files
 
     return ext_dict
-
-def raise_help():
-    message="ERROR! USAGE FORMAT MUST BE: sort.py -type"
-    usage ="".join(("Types: -s (sort) | -so (sort one) | -d (display) | -a (append)\n",
-                      " -s  | sort a directory\n",
-                      "     | Usage: -s [path]\n",
-                      "     |",
-                      " -so | sort a directory for a single extension\n",
-                      "     | Usage: -so [path] [.ext]\n",
-                      "     |",
-                      " -d  | display files that can sorted in a directory\n",
-                      "     | Usage: -d [path]\n",
-                      "     |",
-                      " -a  | append extension(s) to the master extensions.txt\n",
-                      "     | Usage: -a [.ext1] [.ext2] [.ext3] ...\n"))
-    try:
-        raise UsageError(message=message, usage=usage)
-    except UsageError as err:
-        print (err)
-        raise SystemExit
-
-def raise_type_error(type=''):
-    if type not in ['-s','-so','-d','-a']:
-        raise_help()
-    elif type == '-s':
-        try:
-            raise UsageError(usage=" -s  | sort a directory\n"
-                                   "     | Usage: -s [path]")
-        except UsageError as err:
-            print (err)
-            raise SystemExit
-    elif type == '-so':
-        try:
-            raise UsageError(usage=" -so | sort a directory for a single extension\n"
-                                   "     | Usage: -so [path] [.ext]")
-        except UsageError as err:
-            print (err)
-            raise SystemExit
-    elif type == '-d':
-        try:
-            raise UsageError(usage=" -d  | display files that can sorted in a directory\n"
-                                   "     | Usage: -d [path]")
-        except UsageError as err:
-            print (err)
-            raise SystemExit
-    elif type == '-a':
-        try:
-            raise UsageError(message="ERROR! NO VALID EXTENSIONS PROVIDED:",
-                             usage=" -a  | append extension(s) to the master extensions.txt\n"
-                                   "     | Usage: -a [.ext1] [.ext2] [.ext3] ...")
-        except UsageError as err:
-            print (err)
-            raise SystemExit
 
 if __name__ == '__main__':
     main()

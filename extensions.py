@@ -1,12 +1,12 @@
 import sys #args
 
 class Extensions:
-    def __init__(self, path=sys.executable, single=''):
+    def __init__(self, path=sys.executable, list=[]):
         self.path = path
-        if not single:
+        if not list:
             self.ext_list = Extensions.load_ext()
         else:
-            self.ext_list = [single]
+            self.ext_list = list
 
     @staticmethod
     def load_ext():
