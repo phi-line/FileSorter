@@ -46,3 +46,8 @@
 .svg
 .xz
 .MID
+.mtl
+.obj
+.cs
+.app
+.kext

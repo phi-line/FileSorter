@@ -4,9 +4,12 @@ import sys #args
 import shutil #hight level file operations
 
 class extensions:
-    def __init__(self, path=sys.executable):
+    def __init__(self, path=sys.executable, single=''):
         self.path = path
-        self.ext_list = extensions.load_ext()
+        if not single:
+            self.ext_list = extensions.load_ext()
+        else:
+            self.ext_list = [single]
 
     @staticmethod
     def load_ext():
@@ -39,9 +42,11 @@ class NoSortableFiles(Exception):
 
 def main():
     # python3 sort.py -s [PATH]
-    if len(sys.argv) <= 2 and sys.argv[1] not in ['-s','-d','-a']:
-        print ("Format must be sort.py -type [PATH]")
-        print ("Types: -s (sort) or -d (display)")
+    if len(sys.argv) <= 2 and sys.argv[1] not in ['-s','-sa','-d','-a']:
+        print ("Format must be sort.py -type")
+        print ("Types: -s (sort) | -so (sort one) | -d (display) | -a (""append)")
+        print ("Usage: -s [PATH]")
+        print ("Usage: -so")
         raise SystemExit
     if sys.argv[1] == '-a':
         e = extensions()
@@ -52,8 +57,12 @@ def main():
         print ("{} is not a valid directory".format(sys.argv[2]))
         raise SystemExit
 
-    e = extensions(path = sys.argv[2])
     type = sys.argv[1]
+
+    #python3 sort.py -sa [PATH] .txt
+    if type == '-so':
+        e = extensions(path = sys.argv[2], single=sys.argv[3])
+    else: e = extensions(path = sys.argv[2])
 
     # {'ext': ['/path1', '/path2']}
     ext_dict = dict()
