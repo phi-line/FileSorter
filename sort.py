@@ -13,6 +13,7 @@ def main():
 
     type = sys.argv[1]
 
+    # python3 sort.py -a [.ext1] [.ext2] [.ext3] ...
     if type == '-a':
         e = ext()
         add_ext = [sys.argv[x] for x in range(2, len(sys.argv)) if
@@ -20,35 +21,19 @@ def main():
         if add_ext:
             e.append_ext(add_ext)
         else:
-            try:
-                raise UsageError(message="ERROR! NO VALID EXTENSIONS PROVIDED:",
-                                 usage=" -a  | append extension(s) to the master extensions.txt\n"
-                                       "     | Usage: -a [.ext1] [.ext2] [.ext3] ...")
-            except UsageError as err:
-                print (err)
-                raise SystemExit
+            raise_type_error(type)
 
+    # this is only for -s, -so, and -d
     if len(sys.argv) <= 2 or not os.path.isdir(sys.argv[2]):
         raise_type_error(type)
 
-    #python3 sort.py -sa [PATH] .txt
+    #python3 sort.py -so [path] [.ext1]
     if type == '-so':
         e = ext(path = sys.argv[2], single=sys.argv[3])
     else: e = ext(path = sys.argv[2])
 
     # {'ext': ['/path1', '/path2']}
-    ext_dict = dict()
-
-    for line in e.ext_list:
-        #for file in glob.glob(''.join(path, '*', line)):
-        #files = [n for n in glob('*'.join((path, line))) if os.path.isfile(n)]
-
-        files = [f for f in os.listdir(e.path) if f.endswith(line)]
-        if files:
-            if line in ext_dict:
-                ext_dict[line].extend(files)
-            else:
-                ext_dict[line] = files
+    ext_dict = ext_dict_builder(e.ext_list)
 
     if type == '-d':
         if ext_dict:
@@ -81,6 +66,22 @@ def main():
             print(err)
 
             raise SystemExit
+
+def ext_dict_builder(ext_list):
+    ext_dict = dict()
+
+    for line in ext_list:
+        #for file in glob.glob(''.join(path, '*', line)):
+        #files = [n for n in glob('*'.join((path, line))) if os.path.isfile(n)]
+
+        files = [f for f in os.listdir(e.path) if f.endswith(line)]
+        if files:
+            if line in ext_dict:
+                ext_dict[line].extend(files)
+            else:
+                ext_dict[line] = files
+
+    return ext_dict
 
 def raise_help():
     message="ERROR! USAGE FORMAT MUST BE: sort.py -type"
@@ -128,7 +129,8 @@ def raise_type_error(type=''):
             raise SystemExit
     elif type == '-a':
         try:
-            raise UsageError(usage=" -a  | append extension(s) to the master extensions.txt\n"
+            raise UsageError(message="ERROR! NO VALID EXTENSIONS PROVIDED:",
+                             usage=" -a  | append extension(s) to the master extensions.txt\n"
                                    "     | Usage: -a [.ext1] [.ext2] [.ext3] ...")
         except UsageError as err:
             print (err)
