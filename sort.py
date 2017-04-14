@@ -9,7 +9,7 @@ from extensions import Extensions as ext
 def main():
     # python3 sort.py -s [PATH]
     if len(sys.argv) <= 1 or sys.argv[1] not in ['-s','-so','-d','-a']:
-        raise_help()
+        Erect.raise_help()
 
     type = sys.argv[1]
 
@@ -21,11 +21,11 @@ def main():
         if add_ext:
             e.append_ext(add_ext)
         else:
-            raise_usage_error(type)
+            Erect.raise_usage_error(type)
 
     # this is only for -s, -so, and -d
     if len(sys.argv) <= 2 or not os.path.isdir(sys.argv[2]):
-        raise_usage_error(type)
+        Erect.raise_usage_error(type)
 
     #python3 sort.py -so [path] [.ext1] [.ext2] [.ext3] ...
     if len(sys.argv) > 3:
