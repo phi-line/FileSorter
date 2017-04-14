@@ -8,7 +8,7 @@ from extensions import Extensions as ext
 
 def main():
     # python3 sort.py -s [PATH]
-    if len(sys.argv) <= 1 or sys.argv[1] not in ['-s','-so','-d','-a']:
+    if len(sys.argv) <= 1 or sys.argv[1] not in ['-s','-d','-a']:
         Erect.raise_help()
 
     type = sys.argv[1]

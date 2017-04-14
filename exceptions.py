@@ -21,12 +21,9 @@ class Erect():
     def raise_help():
         message = "ERROR! USAGE FORMAT MUST BE: sort.py -type"
         usage = "".join((
-                        "Types: -s (sort) | -so (sort one) | -d (display) | -a (append)\n",
+                        "Types: -s (sort) | -d (display) | -a (append)\n",
                         " -s  | sort a directory\n",
                         "     | Usage: -s [path]\n",
-                        "     |",
-                        " -so | sort a directory for a single extension\n",
-                        "     | Usage: -so [path] [.ext]\n",
                         "     |",
                         " -d  | display files that can sorted in a directory\n",
                         "     | Usage: -d [path]\n",
@@ -40,20 +37,12 @@ class Erect():
             raise SystemExit
 
     def raise_usage_error(type=''):
-        if type not in ['-s', '-so', '-d', '-a']:
+        if type not in ['-s', '-d', '-a']:
             raise_help()
         elif type == '-s':
             try:
                 raise UsageError(usage=" -s  | sort a directory\n"
                                        "     | Usage: -s [path]")
-            except UsageError as err:
-                print (err)
-                raise SystemExit
-        elif type == '-so':
-            try:
-                raise UsageError(
-                    usage=" -so | sort a directory for a single extension\n"
-                          "     | Usage: -so [path] [.ext]")
             except UsageError as err:
                 print (err)
                 raise SystemExit
