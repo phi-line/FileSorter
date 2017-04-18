@@ -1,6 +1,14 @@
 import sys #args
 
 class Extensions:
+    '''
+    This is a class that generates a list of extensions from a master file
+    It can also be passed a custom extension list instead
+
+    Members:
+    path(string) - The file path in which to target
+    ext_list(list) - The list of extensions to target
+    '''
     def __init__(self, path=sys.executable, list=[]):
         self.path = path
         if not list:
@@ -10,6 +18,9 @@ class Extensions:
 
     @staticmethod
     def load_ext():
+    '''
+    This function returns an extension list from a master file "ext_list.txt"
+    '''
         ext_list = []
         try:
             with open('ext_list.txt') as file:
@@ -21,6 +32,9 @@ class Extensions:
 
     @staticmethod
     def append_ext(args):
+    '''
+    This function appends any number of args to the master file
+    '''
         try:
             with open('ext_list.txt', 'a+') as file:
                 for ext in args:
@@ -30,6 +44,7 @@ class Extensions:
 
     @staticmethod
     def is_valid(ext):
+    '''This function returns a bool whether the extension given is valid'''
         if ext.startswith("."):
             return True
         else: return False

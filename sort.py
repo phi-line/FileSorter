@@ -1,7 +1,6 @@
 import os
 import sys #args
-#import glob
-import shutil #hight level file operations
+import shutil #high level file operations
 
 from exceptions import UsageError, NoSortableFiles, Erect
 from extensions import Extensions as ext
@@ -23,11 +22,12 @@ def main():
         else:
             Erect.raise_usage_error(type)
 
-    # this is only for -s, -so, and -d
+    # this is only for -s and -d
     if len(sys.argv) <= 2 or not os.path.isdir(sys.argv[2]):
         Erect.raise_usage_error(type)
 
-    #python3 sort.py -so [path] [.ext1] [.ext2] [.ext3] ...
+    # python3 sort.py -s [path] [.ext1] [.ext2] [.ext3] ...
+    # if no items are given it will default to the master list
     if len(sys.argv) > 3:
         ext_list = [sys.argv[x] for x in range(3, len(sys.argv)) if
                    ext.is_valid(sys.argv[x])]
@@ -70,12 +70,21 @@ def main():
             raise SystemExit
 
 def ext_dict_builder(e):
+    '''
+    This function builds the extension dictionary out of the supplied
+    extension object. It takes the private member ext_list and then for each
+    ext type it will create a list of those files found in the src dir.
+    It then fills and returns the dictionary.
+    
+    Arguments:
+    e - an Extension object containing the path and the list of ext found
+
+    Return:
+    ext_dict - A dictionary in the format: {.ext : [ext_list]}
+    '''
     ext_dict = dict()
 
     for line in e.ext_list:
-        #for file in glob.glob(''.join(path, '*', line)):
-        #files = [n for n in glob('*'.join((path, line))) if os.path.isfile(n)]
-
         files = [f for f in os.listdir(e.path) if f.endswith(line)]
         if files:
             if line in ext_dict:

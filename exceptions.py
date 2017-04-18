@@ -1,4 +1,10 @@
 class NoSortableFiles(Exception):
+    '''
+    This is an exception raised when there are no files that can be sorted
+
+    Members:
+    message - A message that can be customized based on how it was raised
+    '''
     def_msg = 'ERROR! NO KNOWN FILES CAN BE SORTED.'
 
     def __init__(self, message=def_msg):
@@ -8,6 +14,13 @@ class NoSortableFiles(Exception):
         return self.message
 
 class UsageError(Exception):
+    '''
+    This is an exception raised when an argument usage error occurs.
+
+    Members:
+    message - A message that can be customized based on how it was raised
+    usage - A secondary message that shows the proper usage for the arg
+    '''
     def_msg = 'ERROR! INVALID PATH PROVIDED:'
 
     def __init__(self, message=def_msg, usage=''):
@@ -18,7 +31,15 @@ class UsageError(Exception):
         return "\n".join((self.message,self.usage))
 
 class Erect():
+    '''
+    Erect is a class that handles all types of exceptions raised when an
+    invalid argument usage is given. It calls the UsageError exception and
+    passes it information specific to the type of argument that was misused.
+    '''
     def raise_help():
+        '''
+        A general help message that displays all usages possible
+        '''
         message = "ERROR! USAGE FORMAT MUST BE: sort.py -type"
         usage = "".join((
                         "Types: -s (sort) | -d (display) | -a (append)\n",
@@ -37,6 +58,12 @@ class Erect():
             raise SystemExit
 
     def raise_usage_error(type=''):
+        '''
+        This function raises specific info based on the type arg given.
+        
+        Argument:
+        type(string) - The type of argument
+        '''
         if type not in ['-s', '-d', '-a']:
             raise_help()
         elif type == '-s':
