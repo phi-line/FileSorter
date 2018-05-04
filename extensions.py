@@ -1,4 +1,5 @@
 import sys #args
+from os.path import dirname, abspath, join
 
 class Extensions:
     '''
@@ -23,7 +24,8 @@ class Extensions:
         '''
         ext_list = []
         try:
-            with open('ext_list.txt') as file:
+            path = dirname(abspath(__file__))
+            with open(join(path, 'ext_list.txt')) as file:
                 ext_list = [l.rstrip('\n') for l in file]
         except FileNotFoundError as err:
             print("File not found error: {}".format(err))
