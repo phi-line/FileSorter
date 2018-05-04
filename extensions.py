@@ -18,9 +18,9 @@ class Extensions:
 
     @staticmethod
     def load_ext():
-    '''
-    This function returns an extension list from a master file "ext_list.txt"
-    '''
+        '''
+        This function returns an extension list from a master file 'ext_list.txt'
+        '''
         ext_list = []
         try:
             with open('ext_list.txt') as file:
@@ -32,9 +32,9 @@ class Extensions:
 
     @staticmethod
     def append_ext(args):
-    '''
-    This function appends any number of args to the master file
-    '''
+        '''
+        This function appends any number of args to the master file
+        '''
         try:
             with open('ext_list.txt', 'a+') as file:
                 for ext in args:
@@ -44,7 +44,9 @@ class Extensions:
 
     @staticmethod
     def is_valid(ext):
-    '''This function returns a bool whether the extension given is valid'''
+        '''
+        This function returns a bool whether the extension given is valid
+        '''
         if ext.startswith("."):
             return True
         else: return False
